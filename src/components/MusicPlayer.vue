@@ -9,13 +9,31 @@
       <b-col cols="2">
         <b-row>
           <b-col>
-            <b-button class="mb-5" @click="playPrev">PREV</b-button>
+            <b-button class="mb-3" @click="playPrev">PREV</b-button>
           </b-col>
         </b-row>
 
         <b-row>
           <b-col>
-            <b-button @click="handleVolDown">Vol-</b-button>
+            <b-button class="mb-3" @click="handleVolDown">Vol-</b-button>
+          </b-col>
+        </b-row>
+
+        <b-row>
+          <b-col>
+            <b-button  class="mb-3" @click="togglePlay">
+              <span v-if="playing">Pause</span>
+              <span v-else>Play</span>
+            </b-button>
+          </b-col>
+        </b-row>
+
+        <b-row>
+          <b-col>
+            <b-button  class="mb-3" @click="toggleBrightness">
+              <span v-if="day">Night</span>
+              <span v-else>Day</span>
+            </b-button>
           </b-col>
         </b-row>
       </b-col>
@@ -32,7 +50,7 @@
     </b-list-group>
       </b-col>
 
-      <b-col cols="2">
+      <b-col>
         <b-row>
           <b-col>
             <b-button class="mb-5" @click="playNext">NEXT</b-button>
@@ -40,34 +58,19 @@
         </b-row>
         <b-row>
           <b-col>
-            <b-button @click="handleVolUp">Vol+</b-button>
+            <b-button class="mb-5" @click="handleVolUp">Vol+</b-button>
           </b-col>
-        </b-row>            
+        </b-row>
+        <b-row>
+          <b-col class="mb-5">
+            <b-button @click="cls">Close</b-button>
+          </b-col>
+        </b-row>        
       </b-col>
     </b-row>
-    <b-row>
-      <b-col cols="2">
-        <b-button @click="toggle">
-          <span v-if="playing">Pause</span>
-          <span v-else>Play</span>
-        </b-button>
-      </b-col>
-      <b-col cols="8">
-        <center>
-        <audio controls autoplay ref="player" style="display: none;" @ended="playNext" @play="onPlay">
-          <source src="">
-        </audio>
-        </center>
-      </b-col>
-      <b-col cols="2">
-        <b-button @click="cls">Close</b-button>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
-        
-      </b-col>
-    </b-row>    
+    <audio controls autoplay ref="player" style="display: none;" @ended="playNext" @play="onPlay">
+      <source src="">
+    </audio>
   </b-container>
 </template>
 
@@ -87,8 +90,8 @@ export default {
       paused: true,
       playing: false,
       songIndex: 0,
-      volume: 1.0
-      
+      volume: 1.0,
+      day: true
     }
   },
   methods: {
@@ -203,7 +206,7 @@ export default {
       let player = this.$refs.player
       player.play()
     },
-    toggle(){      
+    togglePlay(){      
       if (this.playing){
         this.playing = false
         let player = this.$refs.player
@@ -213,6 +216,15 @@ export default {
         let player = this.$refs.player
         player.play()
       }
+    },
+    toggleBrightness(){
+      if (this.day){
+        this.day = false
+        caller.brightness(128)
+      }else{
+        this.day = true
+        caller.brightness(255)
+      }
     }
   }
 }
@@ -220,7 +232,7 @@ export default {
 
 <style>
 .list-group{
-    max-height: 300px;
+    max-height: 250px;
     margin-bottom: 10px;
     overflow:scroll;
     -webkit-overflow-scrolling: touch;

@@ -72,9 +72,9 @@ export async function status(){
     })
 }
 
-export async function goto(index){  
+export async function brightness(val){  
   return apiClient
-    .get("/player/goto?key="+index)
+    .get("/player/brightness?value="+val)
     .then(response => {
       return response.data
     })
